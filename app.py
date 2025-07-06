@@ -10,13 +10,12 @@ from langchain_community.llms import CTransformers
 from pinecone import Pinecone, ServerlessSpec
 from dotenv import load_dotenv
 
-# === Load environment variables ===
 load_dotenv()
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_ENVIRONMENT = os.getenv("PINECONE_ENVIRONMENT")
 INDEX_NAME = "medical-chatbot"
 
-# === Flask App ===
+# Flask App
 app = Flask(__name__)
 qa = None
 
@@ -25,9 +24,7 @@ def setup_pipeline():
 
     pc = Pinecone(api_key=PINECONE_API_KEY)
 
-    # === Create index if it doesn't exist ===
     if INDEX_NAME not in pc.list_indexes().names():
-        print("🔐 Creating Pinecone index...")
         pc.create_index(
             name=INDEX_NAME,
             dimension=384,
@@ -35,48 +32,41 @@ def setup_pipeline():
             spec=ServerlessSpec(cloud="aws", region=PINECONE_ENVIRONMENT)
         )
     else:
-        print("✅ Pinecone index already exists.")
+        print("Pinecone index already exists.")
 
-    # === Load embeddings ===
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     index = pc.Index(INDEX_NAME)
     stats = index.describe_index_stats()
     vector_count = stats.get("total_vector_count", 0)
 
-    # === If Pinecone index is empty, upload PDFs ===
     if vector_count == 0:
-        print("📂 Loading PDFs from: data/")
         loader = DirectoryLoader("data/", glob="*.pdf", loader_cls=PyPDFLoader)
         documents = loader.load()
-        print(f"✅ Loaded {len(documents)} documents.")
 
         splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
         chunks = splitter.split_documents(documents)
-        print(f"📄 Split into {len(chunks)} chunks.")
+        print(f"Split into {len(chunks)} chunks.")
 
-        print("⬆️ Uploading to Pinecone...")
         LangchainPinecone.from_texts(
             [t.page_content for t in chunks],
             embedding=embeddings,
             index_name=INDEX_NAME
         )
-        print("✅ Upload complete.")
+        print("Upload complete.")
     else:
-        print(f"ℹ️ Pinecone has {vector_count} vectors. Skipping upload.")
+        print(f"Pinecone has {vector_count} vectors. Skipping upload.")
 
-    # === Connect to vector store ===
     docsearch = LangchainPinecone.from_existing_index(INDEX_NAME, embeddings)
 
-    # === Load LLM ===
+    # Load LLM 
     llm = CTransformers(
         model="model/llama-2-7b-chat.ggmlv3.q4_0.bin",
         model_type="llama",
         config={"max_new_tokens": 512, "temperature": 0.7}
     )
-    print("✅ LLM loaded.")
+    print("LLM loaded.")
 
-    # === Setup Retrieval QA ===
     prompt_template = """
     Use the following pieces of information to answer the user's question.
     If you don't know the answer, just say that you don't know — don't make it up.
@@ -96,19 +86,18 @@ def setup_pipeline():
         return_source_documents=False,
         chain_type_kwargs={"prompt": PROMPT}
     )
-    print("✅ RetrievalQA chain ready.")
+    print("RetrievalQA chain ready.")
 
-# === ROUTES ===
 
 @app.route("/", methods=["GET"])
 def home():
-    return render_template("index.html")  # your new UI HTML
+    return render_template("index.html") 
 
 @app.route("/get", methods=["POST"])
 def get_response():
     user_msg = request.form.get("msg")
     if not user_msg:
-        return "⚠️ No message received."
+        return "No message received."
 
     try:
         result = qa({"query": user_msg})
@@ -116,10 +105,8 @@ def get_response():
         return answer
     except Exception as e:
         print(f"Error during QA: {e}")
-        return "❌ Sorry, something went wrong while processing your request."
+        return "Sorry, something went wrong while processing your request."
 
-
-# === Main ===
 if __name__ == "__main__":
     # Avoid reinitialization on debug reload
     if os.environ.get("WERKZEUG_RUN_MAIN") == "true" or os.environ.get("FLASK_ENV") != "development":
