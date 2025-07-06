@@ -48,8 +48,8 @@ Create a .env file:
 
 ### 5️⃣ Add Llama 2 Model
 
-Download: llama-2-7b-chat.ggmlv3.q4_0.bin
-Place it inside the model/ directory.
+-Download: llama-2-7b-chat.ggmlv3.q4_0.bin
+-Place it inside the model/ directory.
 
 ### 7️⃣ Run the App
 
