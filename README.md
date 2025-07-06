@@ -74,18 +74,19 @@ Create a .env file:
 
 ### 📁 Project Structure
 
-- ├── app.py
-- ├── model/
-      - └── llama-2-7b-chat.ggmlv3.q4_0.bin
-      - └── instruction
-- ├── templates/
-      - └── index.html
-- ├── static/
-      - └── style.css
-- ├── data/
-      - └── Medical Book.pdf
-- ├── requirements.txt
-- └── .env
+├── app.py
+├── store_index.py
+├── model/
+│   └── llama-2-7b-chat.ggmlv3.q4_0.bin
+├── templates/
+│   └── index.html
+├── static/
+│   └── style.css
+├── data/
+│   └── your-medical-documents.pdf
+├── requirements.txt
+└── .env
+
 
 ---
 
