@@ -77,15 +77,15 @@ Create a .env file:
 - ├── app.py
 - ├── model/
 - │   └── llama-2-7b-chat.ggmlv3.q4_0.bin
-    └── instruction
+-    └── instruction
 - ├── templates/
 - │   └── index.html
 - ├── static/
-│   └── style.css
-├── data/
-│   └── Medical Book.pdf
-├── requirements.txt
-└── .env
+- │   └── style.css
+- ├── data/
+- │   └── Medical Book.pdf
+- ├── requirements.txt
+- └── .env
 
 ---
 
