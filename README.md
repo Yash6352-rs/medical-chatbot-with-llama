@@ -4,11 +4,11 @@ A locally running medical chatbot that uses Meta’s Llama 2 model to answer hea
 
 
 ### 🔍 Features
-📚 Understands medical queries and responds intelligently
-🧠 Powered by locally hosted Llama 2 model
-📁 Retrieves answers from PDFs using LangChain
-🌲 Uses Pinecone for vector similarity search
-💬 Custom frontend UI (no WhatsApp clone)
+- Understands medical queries and responds intelligently
+- Powered by locally hosted Llama 2 model
+- Retrieves answers from PDFs using LangChain
+- Uses Pinecone for vector similarity search
+- Custom frontend UI (no WhatsApp clone)
 
 ### 🛠️ Tech Stack
 
@@ -24,6 +24,7 @@ HTML + CSS (Custom UI)
 ### 1️⃣ Clone the Repository
 
 git clone https://github.com/your-username/medical-chatbot
+
 cd medical-chatbot
 
 ### 2️⃣ Create and Activate Environment
