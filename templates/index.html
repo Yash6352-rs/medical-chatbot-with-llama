@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical Chatbot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- JS (for AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="chat-wrapper">
+        <div class="chat-box">
+            <div class="chat-header">
+                <img src="https://cdn-icons-png.flaticon.com/512/4320/4320337.png" alt="Bot Icon" class="bot-icon">
+                <div>
+                    <h1>Medical Chatbot</h1>
+                    <p>Your AI health assistant</p>
+                </div>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <!-- Messages will appear here -->
+            </div>
+            <form id="chat-form" class="chat-form">
+                <input type="text" name="query" id="user-input" placeholder="Describe your symptoms or ask a health question..." autocomplete="off" required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#chat-form').on('submit', function (e) {
+                e.preventDefault();
+                const userInput = $('#user-input').val().trim();
+                if (!userInput) return;
+
+                $('#chat-body').append(`
+                    <div class="chat-message user">
+                        <p>${userInput}</p>
+                    </div>
+                `);
+                $('#user-input').val("");
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/get',
+                    data: { msg: userInput },
+                    success: function (response) {
+                        $('#chat-body').append(`
+                            <div class="chat-message bot">
+                                <p>${response}</p>
+                            </div>
+                        `);
+                        $('#chat-body').scrollTop($('#chat-body')[0].scrollHeight);
+                    },
+                    error: function () {
+                        $('#chat-body').append(`
+                            <div class="chat-message bot error">
+                                <p>Sorry, there was a problem. Please try again.</p>
+                            </div>
+                        `);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
