@@ -48,8 +48,8 @@ Create a .env file:
 
 ### 5️⃣ Add Llama 2 Model
 
--Download: llama-2-7b-chat.ggmlv3.q4_0.bin
--Place it inside the model/ directory.
+- Download: llama-2-7b-chat.ggmlv3.q4_0.bin
+- Place it inside the model/ directory.
 
 ### 7️⃣ Run the App
 
@@ -64,7 +64,6 @@ Create a .env file:
 
 ---
 
-
 ### Example Questions You Can Ask
 
 - What are the symptoms of diabetes?
@@ -75,13 +74,13 @@ Create a .env file:
 
 ### 📁 Project Structure
 
-├── app.py
-├── model/
-│   └── llama-2-7b-chat.ggmlv3.q4_0.bin
+- ├── app.py
+- ├── model/
+- │   └── llama-2-7b-chat.ggmlv3.q4_0.bin
     └── instruction
-├── templates/
-│   └── index.html
-├── static/
+- ├── templates/
+- │   └── index.html
+- ├── static/
 │   └── style.css
 ├── data/
 │   └── Medical Book.pdf
